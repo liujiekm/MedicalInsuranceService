@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedicalInsuranceService.Formatter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -19,6 +20,11 @@ namespace MedicalInsuranceService
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.RemoveAt(0);
+            config.Formatters.Add(new JilFormatter());
+
+
         }
     }
 }
