@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalInsuranceService", "MedicalInsuranceService\MedicalInsuranceService.csproj", "{922004CD-1F66-4892-9499-051719DC37AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalInsuranceService.Tests", "MedicalInsuranceService.Tests\MedicalInsuranceService.Tests.csproj", "{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{922004CD-1F66-4892-9499-051719DC37AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{922004CD-1F66-4892-9499-051719DC37AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{922004CD-1F66-4892-9499-051719DC37AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{922004CD-1F66-4892-9499-051719DC37AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
