@@ -1,4 +1,5 @@
 ﻿using MedicalInsuranceService.Formatter;
+using MedicalInsuranceService.LogAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace MedicalInsuranceService
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            config.Filters.Add(new ElmahErrorAttribute());
             config.Formatters.RemoveAt(0);
             config.Formatters.Add(new JilFormatter());
 

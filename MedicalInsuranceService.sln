@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalInsuranceService", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalInsuranceService.Tests", "MedicalInsuranceService.Tests\MedicalInsuranceService.Tests.csproj", "{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalInsuranceService.Data", "MedicalInsuranceService.Data\MedicalInsuranceService.Data.csproj", "{5BF52781-BA08-4BD5-8392-61338FC8C1D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,16 @@ Global
 		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBAB1C5D-BCDB-4B6D-B627-3DBBA6339E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BF52781-BA08-4BD5-8392-61338FC8C1D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BF52781-BA08-4BD5-8392-61338FC8C1D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BF52781-BA08-4BD5-8392-61338FC8C1D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BF52781-BA08-4BD5-8392-61338FC8C1D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35
 	EndGlobalSection
 EndGlobal

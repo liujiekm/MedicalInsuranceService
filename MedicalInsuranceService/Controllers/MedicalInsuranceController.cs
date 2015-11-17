@@ -29,7 +29,11 @@ namespace MedicalInsuranceService.Controllers
                 //var response = await client.PostAsJsonAsync("",)
             }
         }
-
+        /// <summary>
+        /// 测试PB调用POST方法
+        /// </summary>
+        /// <param name="postData">传递的数据</param>
+        /// <returns></returns>
         [Route("PT")]
         [HttpPost]
         public ResponseBaseJson PBPostTest(PostBaseJson postData)
@@ -37,11 +41,9 @@ namespace MedicalInsuranceService.Controllers
             return
                 new ResponseBaseJson()
                 {
-                    success = "T",
-                    error_code = "null"
+                    Success = "T",
+                    ErrorCode = "null"
                 };
-
-            
         }
 
 

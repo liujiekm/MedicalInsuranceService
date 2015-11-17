@@ -1,0 +1,895 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MedicalInsuranceService</name>
+    </assembly>
+    <members>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:MedicalInsuranceService.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:MedicalInsuranceService.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,MedicalInsuranceService.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,MedicalInsuranceService.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:MedicalInsuranceService.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},MedicalInsuranceService.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.#ctor(MedicalInsuranceService.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,MedicalInsuranceService.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:MedicalInsuranceService.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MedicalInsuranceService.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MedicalInsuranceService.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.NoticeRemind">
+             <summary>
+            调用阳光医保提示服务
+             </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.PBPostTest(MedicalInsuranceService.Models.PostBaseJson)">
+            <summary>
+            测试PB调用POST方法
+            </summary>
+            <param name="postData">传递的数据</param>
+            <returns></returns>
+        </member>
+        <member name="T:MedicalInsuranceService.Formatter.JilFormatter">
+            <summary>
+            替换API 内部默认的Newton.json来处理JSON数据的方式
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AdviceDetail">
+            <summary>
+            医嘱明细信息说明
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.ProjectCode">
+            <summary>
+            project_code	
+            项目编码(使用医保三目录项目编码)，正常情况必填，特殊情况，如生化全套等没有医保编码，可放空。
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.HospitalCode">
+            <summary>
+            hospital_code
+            院内项目编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.ProjectName">
+            <summary>
+            project_name
+            项目名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.RecipeNo">
+            <summary>
+            recipe_no
+            处方号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.InvoiceProject">
+            <summary>
+            invoice_project
+            发票项目编码（使用医保发票项目编码）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.DoseForm">
+            <summary>
+            dose_form
+            剂型, 具体可使用剂型详见附录五的编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.MedicalSpecification">
+            <summary>
+            medical_specification
+            规格
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.Price">
+            <summary>
+            price
+            单价，必须使用数值型，如”12.5”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.MedicalNumber">
+            <summary>
+            medical_number	
+            数量，必须使用数值型，如”10”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.DoseUnit">
+            <summary>
+            dose_unit
+            单位
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.Amount">
+            <summary>
+            amount
+            金额，必须使用数值型，如”50.5”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.UseDay">
+            <summary>
+            use_day
+            用药天数（项目为药品时非空），医嘱服用该药品天数，必须使用数值型，如”15”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.SingleDoseNumber">
+            <summary>
+            single_dose_number
+            单次用药量（项目为药品时非空），配合下一个字段的单位，如 50 mg，必须使用数值型，如”50”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.SingleDoseUnit">
+            <summary>
+            single_dose_unit
+            单次用药量剂量单位（项目为药品时非空），具体可使用剂量单位详见附录四的编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.TakeMedicalNumber">
+            <summary>
+            take_medical_number	
+            取药总量（项目为药品时非空），配合下一个字段的单位，如 500 mg，必须使用数值型，如”500”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.TakeMedicalUnit">
+            <summary>
+            take_medical_unit
+            取药总量剂量单位（项目为药品时非空），具体可使用剂量单位附录四的编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.DoseDay">
+            <summary>
+            dose_day
+            药量天数（项目为药品时非空），依据医嘱服药要求，所配药品患者可以服用的天数，必须使用数值型，如”5”
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.DeliverWay">
+            <summary>
+            deliver_way
+            给药途径，具体给药途径详见附录三的编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.TakeFrequence">
+            <summary>
+            take_frequence
+            服用频次，具体可用服用频次详见附录二的编码
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AuditContent">
+            <summary>
+            Audit 服务基本信息内容
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.VisitNo">
+            <summary>
+            visit_no
+            门诊挂号号/住院登记号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.VisitType">
+            <summary>
+            visit_type
+            就诊类型（1住院、2门诊）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.MedicineType">
+            <summary>
+            medicine_type
+            医疗类别，见附录一的编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.InHospDate">
+            <summary>
+            in_hosp_date
+            入院日期（就诊类型是住院的非空,格式：YYYYMMDD）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.DoctorAdviceNo">
+            <summary>
+            doctor_advice_no
+            处方流水号（医院内部唯一号）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.Diagnoses">
+            <summary>
+            diagnoses
+            诊断信息（多项）（内容说明参见Diagnoses（诊断信息说明））
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditContent.AdviceDetails">
+            <summary>
+            advice_details
+            医嘱明细信息（多项）（内容说明参见advice_details(医嘱明细信息说明)）
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AuditPostData">
+            <summary>
+            审核请求数据
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditPostData.Content">
+            <summary>
+            Audit请求内容主体
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AuditReason">
+            <summary>
+            Audit 返回数据字段Reason
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditReason.ReasonNo">
+            <summary>
+            reason_no
+            原因编号，在反馈时上传使用，无需在前台显示
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditReason.ReasonDesc">
+            <summary>
+            reason_desc
+            原因说明，可供医师选择的原因文字，需要前台显示
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AuditResponseData">
+            <summary>
+            Audit服务返回的整体数据
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.AuditResult">
+            <summary>
+            Audit 返回数据内容说明
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditResult.RuleName">
+            <summary>
+            rule_name
+            规则名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditResult.ResultDesc">
+            <summary>
+            result_desc
+            异常级别描述（违规，高度可疑，可疑）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditResult.ProjectCode">
+            <summary>
+            project_code
+            项目编号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditResult.ProjectName">
+            <summary>
+            project_name	
+            项目名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AuditResult.ExDesc">
+            <summary>
+            ex_desc
+            异常描述
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Audit.Diagnose">
+            <summary>
+            诊断信息说明
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.Diagnose.DiagnoseCode">
+            <summary>
+            diagnose_code	true	char	诊断代码（使用医保下发诊断代码（ICD-10））
+            </summary>
+            
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.Diagnose.DiagnoseDesc">
+            <summary>
+            diagnose_desc	true	char 诊断描述
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Content">
+            <summary>
+            请求内容基类
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Content.CardNo">
+            <summary>
+            card_no		 
+            社保卡号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Content.MedicalDeptCode">
+            <summary>
+            medical_dept_code		 
+            科室编码（使用医院科室编号）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Content.MedicalDeptName">
+            <summary>
+            medical_dept_name		 
+            科室名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Content.DoctorCode">
+            <summary>
+            doctor_code		 
+            医师编号（使用医保医生编号）
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Content.DoctorName">
+            <summary>
+            doctor_name		 
+            医师姓名
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Feedback.FeedbackContent">
+            <summary>
+            反馈服务的请求数据内容主体
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackContent.TranSerialNo">
+            <summary>
+             tran_serial_no
+            审核接口返回的交易流水号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackContent.ReasonNo">
+            <summary>
+             reason_no
+            医师根据原因清单选择的原因编号。若手工填写，则为空
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackContent.ReasonOther">
+            <summary>
+             reason_other
+            若未填写原因编号，则将手工填写的原因说明上传。最长200个字符。
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Feedback.FeedbackPostData">
+            <summary>
+            反馈服务的请求数据
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackPostData.Content">
+            <summary>
+            反馈服务的请求数据内容主体
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Feedback.FeedbackResponseData">
+            <summary>
+            反馈服务返回的数据
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackResponseData.Result">
+            <summary>
+            result 字段
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.PostBaseJson">
+            <summary>
+            请求数据基类
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.PostBaseJson.AuthToken">
+            <summary>
+            阳光医保给各医院分配的Token
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.PostBaseJson.PublicType">
+            <summary>
+            接口类型
+            notice通知，remind提醒、audit审核、feedback反馈
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.RemindPostData">
+            <summary>
+            提醒接口提交数据
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.RemindResponseData">
+            <summary>
+            提醒服务返回数据
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.RemindResult">
+             <summary>
+            提示服务返回数据结果
+             </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.RemindResult.SerialNo">
+            <summary>
+            serial_no	true	序号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.RemindResult.RemindMsg">
+            <summary>
+            remind_msg	true	提示信息
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.ResponseBaseJson">
+             <summary>
+            医保返回数据基类
+             </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.ResponseBaseJson.Success">
+            <summary>
+            请求是否成功。 T代表成功，F代表失败
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.ResponseBaseJson.ErrorCode">
+            <summary>
+            错误编码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.ResponseBaseJson.ErrorMsg">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.ResponseBaseJson.TranSerialNo">
+            <summary>
+            交易流水号（唯一主键）
+            </summary>
+        </member>
+    </members>
+</doc>
