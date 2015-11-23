@@ -481,17 +481,46 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.NoticeRemind">
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetOracleCacheDependency(System.String)">
+            <summary>
+            创建缓存依赖项
+            </summary>
+            <param name="query">查询命令</param>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.RemindThroughDll(MedicalInsuranceService.Models.Content)">
              <summary>
             调用阳光医保提示服务
              </summary>
         </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.PBPostTest(MedicalInsuranceService.Models.PostBaseJson)">
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.Mapping(MedicalInsuranceService.Models.Audit.AuditContent)">
             <summary>
-            测试PB调用POST方法
+            修改医保相关字段
             </summary>
-            <param name="postData">传递的数据</param>
+            <param name="auditContent"></param>
             <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetDeptNOs">
+            <summary>
+            获取社保科室代码映射关系
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetDiagnosticCodes">
+            <summary>
+            诊断代码
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Audit.AuditContent)">
+             <summary>
+            调用阳光医保审核服务
+             </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Feedback.FeedbackContent)">
+             <summary>
+            调用阳光医保反馈服务
+             </summary>
         </member>
         <member name="T:MedicalInsuranceService.Formatter.JilFormatter">
             <summary>
@@ -839,6 +868,26 @@
             <summary>
             接口类型
             notice通知，remind提醒、audit审核、feedback反馈
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.PublicType">
+            <summary>
+            阳光医保服务类型
+            </summary>
+        </member>
+        <member name="F:MedicalInsuranceService.Models.PublicType.Remind">
+             <summary>
+            提醒服务
+             </summary>
+        </member>
+        <member name="F:MedicalInsuranceService.Models.PublicType.Audit">
+            <summary>
+            审核服务
+            </summary>
+        </member>
+        <member name="F:MedicalInsuranceService.Models.PublicType.Feedback">
+            <summary>
+            反馈服务
             </summary>
         </member>
         <member name="T:MedicalInsuranceService.Models.RemindPostData">

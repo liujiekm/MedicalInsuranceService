@@ -6,7 +6,7 @@
 using System.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Data.Configuration;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 using MedicalInsuranceService.Data.Configuration;
 

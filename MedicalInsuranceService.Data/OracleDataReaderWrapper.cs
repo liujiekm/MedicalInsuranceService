@@ -8,7 +8,8 @@ using System.Collections;
 using System.Data;
 using System.Globalization;
 using Microsoft.Practices.EnterpriseLibrary.Data;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
+
 
 namespace MedicalInsuranceService.Data
 {

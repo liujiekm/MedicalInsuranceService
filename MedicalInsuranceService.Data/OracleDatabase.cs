@@ -15,8 +15,8 @@ using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using Microsoft.Practices.EnterpriseLibrary.Data.Instrumentation;
-using Oracle.DataAccess.Client;
-using Oracle.DataAccess.Types;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using MedicalInsuranceService.Data.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Data.Oracle;
 
