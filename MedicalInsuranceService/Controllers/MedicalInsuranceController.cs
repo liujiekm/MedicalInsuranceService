@@ -21,7 +21,7 @@ using Oracle.Web.Caching;
 using System.Runtime.InteropServices;
 using System.Text;
 using Jil;
-//using MedicalInsuranceService.App_Code;
+using MedicalInsuranceService.Code;
 
 namespace MedicalInsuranceService.Controllers
 {
@@ -42,7 +42,7 @@ namespace MedicalInsuranceService.Controllers
             //client.Timeout = TimeSpan.FromSeconds(Int32.Parse(timeOut));
 
             //参数为数据库的用户名
-            //connectionString = OracleDatabaseData.ConnectionString;
+            connectionString = OracleConnectionData.ConnectionString;
             
         }
 

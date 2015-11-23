@@ -481,6 +481,51 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="P:MedicalInsuranceService.Code.OracleConnectionData.ConnectionString">
+            <summary>
+            获取连接字符串
+            </summary>
+        </member>
+        <member name="M:MedicalInsuranceService.Code.OracleConnectionData.f_passwd2(System.String,System.Int32)">
+            <summary>
+            按固定数\随机数加密或解密
+            </summary>
+            <param name="as_pass"></param>
+            <param name="ai_mod">ai_mod = 0 固定数加密,ai_mod = 1 随机数加密,ai_mod = 2 解密</param>
+            <returns>加／解密后的字符串</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Code.OracleConnectionData.f_mid(System.String,System.Int32,System.Int32)">
+            <summary>
+            从指定文字开始取len长的字符串
+            </summary>
+            <param name="yourstring">源字符串</param>
+            <param name="start">开始的位置</param>
+            <param name="len">指定长度</param>
+            <returns>字符串</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Code.OracleConnectionData.f_mid(System.String,System.Int32)">
+            <summary>
+            从指定文字开始取len长的字符串
+            </summary>
+            <param name="yourstring">源字符串</param>
+            <param name="start">开始的位置</param>
+            <param name="len">指定长度</param>
+            <returns>字符串</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Code.OracleConnectionData.f_length(System.String)">
+            <summary>
+            返回字符串的长度（包括汉字），汉字长度为2
+            </summary>
+            <param name="yourstring">源字符串</param>
+            <returns>字符串</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Code.OracleConnectionData.Asc(System.String)">
+            <summary>
+            将字符转换为ＡＳＣ码
+            </summary>
+            <param name="asciiCode">字符</param>
+            <returns>对应的ＡＳＣ码</returns>
+        </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetOracleCacheDependency(System.String)">
             <summary>
             创建缓存依赖项

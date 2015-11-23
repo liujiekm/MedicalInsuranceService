@@ -226,7 +226,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\OracleDatabaseData.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
@@ -257,6 +256,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Cache\CacheProvider.cs" />
+    <Compile Include="Code\OracleConnectionData.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicalInsuranceController.cs" />
     <Compile Include="Filter\DeflateCompressionAttribute.cs" />

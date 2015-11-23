@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
-using Oracle.ManagedDataAccess.Client;
 
-
-
-namespace MedicalInsuranceService.App_Code
+namespace MedicalInsuranceService.Code
 {
-    public class OracleDatabaseData
+    public class OracleConnectionData
     {
         /// <summary>
         /// 获取连接字符串
@@ -41,30 +39,6 @@ namespace MedicalInsuranceService.App_Code
                         }
                     }
                 }
-
-                //OracleDatabase db = new OracleDatabase(connectionString);
-                #region 获取数据
-                //using (DbConnection dbConnection = db.CreateConnection())
-                //{
-                //    dbConnection.Open();
-                //    string connStr = @"select dbusername,dbuserpasswd from vi_dbuser";
-                //    DbCommand cmd = db.GetSqlStringCommand(connStr);
-                //    //db.AddInParameter(cmd, ":id", DbType.String, "12");
-
-
-
-                //    using (IDataReader reader = db.ExecuteReader(cmd))
-                //    {
-                //        while (reader.Read())
-                //        {
-                //            User user = new User();
-                //            user.UserName = f_passwd2(reader.GetString(0), 2).ToLower().Trim();
-                //            user.UserPassword = f_passwd2(reader.GetString(1), 2);
-                //            list_user.Add(user);
-                //        }
-                //    }
-                //}
-                #endregion
 
                 foreach (User user in list_user)
                 {
@@ -269,7 +243,10 @@ namespace MedicalInsuranceService.App_Code
             }
 
         }
+
+
     }
+
 
     public class User
     {
