@@ -545,15 +545,10 @@
             <param name="auditContent"></param>
             <returns></returns>
         </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetDeptNOs">
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetMapping(System.String,System.String)">
             <summary>
-            获取社保科室代码映射关系
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetDiagnosticCodes">
-            <summary>
-            诊断代码
+            获取通过查询命令command获取医保编码映射关系
+            通过配置缓存依赖，保证缓存的实时更新
             </summary>
             <returns></returns>
         </member>

@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Jil;
 using MedicalInsuranceService.Code;
+using System.ComponentModel;
 
 namespace MedicalInsuranceService.Controllers
 {
@@ -218,7 +219,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Remind), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut)*1000);
             }
-            catch (Exception ex)
+            catch (Win32Exception ex)
             {
                 exception = ex;
             }
@@ -227,7 +228,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 remindResponseData.Success = "F";
                 remindResponseData.ErrorCode = "";
-                remindResponseData.ErrorMsg = "";
+                remindResponseData.ErrorMsg = exception.Message;
             }
             else
             {
@@ -245,16 +246,51 @@ namespace MedicalInsuranceService.Controllers
         public AuditContent Mapping(AuditContent auditContent)
         {
             //科室医保编号
-            var deptNOs = GetDeptNOs();
+            var deptNOs = GetMapping("deptNOs", "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ");
             auditContent.MedicalDeptCode = deptNOs[auditContent.MedicalDeptCode];
-
-            var diagnoses = GetDiagnosticCodes();
+            var diagnoses = GetMapping("diagnoses", "SELECT JBID,SBBM FROM YL_ZD");
             //诊断代码
             foreach (var diagnose in auditContent.Diagnoses)
             {
                 diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
             }
-            
+            //医疗类别
+            var medicalTypes = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YLLB'");
+            auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
+
+            //剂型类别
+            var doseForms = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JXLB'");
+
+            //剂量单位
+            var singleDoseUnits = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JLDW'");
+
+            //给药途径
+            var deliverWays = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='GYTJ'");
+
+            //药品使用频次
+            var takeFrequences = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YPSYPC'");
+            foreach (var adviceDetail in auditContent.AdviceDetails)
+            {
+                if(!String.IsNullOrEmpty(adviceDetail.DoseForm))
+                {
+                    adviceDetail.DoseForm = doseForms[adviceDetail.DoseForm];
+                }
+
+                if (!String.IsNullOrEmpty(adviceDetail.SingleDoseUnit))
+                {
+                    adviceDetail.SingleDoseUnit = singleDoseUnits[adviceDetail.SingleDoseUnit];
+                }
+
+                if (!String.IsNullOrEmpty(adviceDetail.DeliverWay))
+                {
+                    adviceDetail.DeliverWay = deliverWays[adviceDetail.DeliverWay];
+                }
+
+                if (!String.IsNullOrEmpty(adviceDetail.TakeFrequence))
+                {
+                    adviceDetail.TakeFrequence = takeFrequences[adviceDetail.TakeFrequence];
+                }
+            }
 
 
 
@@ -262,21 +298,26 @@ namespace MedicalInsuranceService.Controllers
         }
 
 
+
+
+
+
+
         /// <summary>
-        /// 获取社保科室代码映射关系
+        /// 获取通过查询命令command获取医保编码映射关系
+        /// 通过配置缓存依赖，保证缓存的实时更新
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> GetDeptNOs()
+        public Dictionary<string, string> GetMapping(string cacheKey,string command)
         {
             var cache = HttpContext.Current.Cache;
-            var deptNo = new Dictionary<string, string>();
-            if (cache.Get("deptNo")!=null)
+            var mapping = new Dictionary<string, string>();
+            if (cache.Get(cacheKey) != null)
             {
-                deptNo = (Dictionary<string, string>)cache.Get("deptNo");
+                mapping = (Dictionary<string, string>)cache.Get(cacheKey);
             }
             else
             {
-                String command = "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ";
                 using (OracleConnection con = new OracleConnection(connectionString))
                 {
                     con.Open();
@@ -285,37 +326,16 @@ namespace MedicalInsuranceService.Controllers
                     var reader = queryCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        deptNo.Add(reader.GetString(0), reader.GetString(1));
+                        mapping.Add(reader.GetString(0), reader.GetString(1));
                     }
-                    cache.Add("deptNo", deptNo, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                    cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
 
                 }
             }
-            return deptNo;
+            return mapping;
         }
 
 
-        /// <summary>
-        /// 诊断代码
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, string> GetDiagnosticCodes()
-        {
-            String command = "SELECT JBID,SBBM FROM YL_ZD";
-            var diagnosticCodes = new Dictionary<string, string>();
-            using (OracleConnection con = new OracleConnection(connectionString))
-            {
-                con.Open();
-                OracleCommand queryCommand = new OracleCommand(command);
-                OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
-                var reader = queryCommand.ExecuteReader();
-                while (reader.Read())
-                {
-                    diagnosticCodes.Add(reader.GetString(0), reader.GetString(1));
-                }
-            }
-            return diagnosticCodes;
-        }
 
 
         /// <summary>
@@ -333,7 +353,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Audit), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut) * 1000);
             }
-            catch (Exception ex)
+            catch (Win32Exception ex)
             {
                 exception = ex;
             }
@@ -342,7 +362,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 auditResponseData.Success = "F";
                 auditResponseData.ErrorCode = "";
-                auditResponseData.ErrorMsg = "";
+                auditResponseData.ErrorMsg =exception.Message;
             }
             else
             {
@@ -379,7 +399,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Feedback), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut) * 1000);
             }
-            catch (Exception ex)
+            catch (Win32Exception ex)
             {
                 exception = ex;
             }
@@ -388,7 +408,7 @@ namespace MedicalInsuranceService.Controllers
             {
                 feedbackResponseData.Success = "F";
                 feedbackResponseData.ErrorCode = "";
-                feedbackResponseData.ErrorMsg = "";
+                feedbackResponseData.ErrorMsg = exception.Message;
             }
             else
             {
