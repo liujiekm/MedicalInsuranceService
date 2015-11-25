@@ -12,7 +12,10 @@ namespace MedicalInsuranceService
         public static void Register(HttpConfiguration config)
         {
             // Web API 配置和服务
-
+            config.Filters.Add(new ElmahErrorAttribute());
+            config.Formatters.Clear();
+            //config.Formatters.RemoveAt(0);
+            config.Formatters.Add(new JilFormatter());
             // Web API 路由
             config.MapHttpAttributeRoutes();
 
@@ -22,9 +25,7 @@ namespace MedicalInsuranceService
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Filters.Add(new ElmahErrorAttribute());
-            config.Formatters.RemoveAt(0);
-            config.Formatters.Add(new JilFormatter());
+           
 
 
         }

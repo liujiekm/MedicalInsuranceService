@@ -26,7 +26,7 @@ namespace MedicalInsuranceService.Formatter
 
         public JilFormatter()
         {
-            _jilOptions = new Options(dateFormat: DateTimeFormat.ISO8601);
+            _jilOptions = new Options(dateFormat: DateTimeFormat.ISO8601,includeInherited:true);
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SupportedEncodings.Add(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true));
             SupportedEncodings.Add(new UnicodeEncoding(bigEndian:false,byteOrderMark:true,throwOnInvalidBytes:true));
