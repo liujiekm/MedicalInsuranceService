@@ -27,7 +27,7 @@ namespace MedicalInsuranceService.Code
                 {
                     conn.Open();
                     string commandStr = @"select dbusername,dbuserpasswd from vi_dbuser";
-                    OracleCommand command = new OracleCommand(commandStr);
+                    OracleCommand command = new OracleCommand(commandStr,conn);
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -52,7 +52,8 @@ namespace MedicalInsuranceService.Code
         }
         private static string GenConnectString(string as_ds, string as_dbuser, string as_password)
         {
-            return "Data Source=" + as_ds + ";User ID=" + as_dbuser + ";Password=" + as_password + ";Pooling=true;";
+            //return "Data Source=" + as_ds + ";User ID=" + as_dbuser + ";Password=" + as_password + ";Pooling=true;";
+            return "password=" + as_password + ";user id=" + as_dbuser + ";data source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.11.74.38)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
         }
 
 

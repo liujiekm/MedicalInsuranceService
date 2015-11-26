@@ -191,6 +191,19 @@
     </Content>
     <Content Include="App_Data\MIHelpPage.XML" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Common\css\bootstrap-theme.css" />
+    <Content Include="Common\css\bootstrap-theme.min.css" />
+    <Content Include="Common\css\bootstrap.css" />
+    <Content Include="Common\css\bootstrap.min.css" />
+    <Content Include="Common\css\selectpick.css" />
+    <Content Include="Common\images\icon.png" />
+    <Content Include="Common\js\bootstrap.js" />
+    <Content Include="Common\js\bootstrap.min.js" />
+    <Content Include="Common\js\jquery-1.10.2.js" />
+    <Content Include="Common\js\knockout-3.2.0.js" />
+    <Content Include="Common\js\npm.js" />
+    <Content Include="Common\js\selectpick.js" />
+    <Content Include="ControlDataMaintenance.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
@@ -215,6 +228,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Common\css\bootstrap-theme.css.map" />
+    <Content Include="Common\css\bootstrap.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -224,7 +239,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -258,7 +275,15 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Cache\CacheProvider.cs" />
     <Compile Include="Code\OracleConnectionData.cs" />
+    <Compile Include="ControlDataMaintenance.aspx.cs">
+      <DependentUpon>ControlDataMaintenance.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlDataMaintenance.aspx.designer.cs">
+      <DependentUpon>ControlDataMaintenance.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\MedicalInsuranceController.cs" />
     <Compile Include="Filter\DeflateCompressionAttribute.cs" />
     <Compile Include="Formatter\JilFormatter.cs" />
@@ -277,6 +302,7 @@
     <Compile Include="Models\Feedback\FeedbackContent.cs" />
     <Compile Include="Models\Feedback\FeedbackPostData.cs" />
     <Compile Include="Models\Feedback\FeedbackResponseData.cs" />
+    <Compile Include="Models\Maintenance\Maintenance.cs" />
     <Compile Include="Models\PostBaseJson.cs" />
     <Compile Include="Models\PublicType.cs" />
     <Compile Include="Models\Remind\RemindPostData.cs" />

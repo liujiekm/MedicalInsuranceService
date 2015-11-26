@@ -526,6 +526,41 @@
             <param name="asciiCode">字符</param>
             <returns>对应的ＡＳＣ码</returns>
         </member>
+        <member name="F:MedicalInsuranceService.ControlDataMaintenance.form1">
+            <summary>
+            form1 控件。
+            </summary>
+            <remarks>
+            自动生成的字段。
+            若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+            </remarks>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MaintenanceController.GetControl">
+            <summary>
+            获取所有对照数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MaintenanceController.DeleteControl(System.Int32)">
+            <summary>
+            根据对照ID删除对照
+            </summary>
+            <param name="controlID">对照ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MaintenanceController.SaveControl(MedicalInsuranceService.Models.Maintenance.Maintenance)">
+            <summary>
+            保存对照，分新增和修改，如果对照id为0或者空，则为新增
+            </summary>
+            <param name="maintenance">对照对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MaintenanceController.GetControlID">
+            <summary>
+            获取对照序列ID
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetOracleCacheDependency(System.String)">
             <summary>
             创建缓存依赖项
@@ -892,6 +927,46 @@
         <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackResponseData.Result">
             <summary>
             result 字段
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.Maintenance.Maintenance">
+            <summary>
+            对照数据维护类
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.ControlID">
+            <summary>
+            对照ID
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.SocialSecurityCode">
+            <summary>
+            社保代码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.LocalCode">
+            <summary>
+            本地代码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.EnglishName">
+            <summary>
+            英文名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.ChineseName">
+            <summary>
+            中文名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.Type">
+            <summary>
+            类别
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Maintenance.Maintenance.Description">
+            <summary>
+            具体描述
             </summary>
         </member>
         <member name="T:MedicalInsuranceService.Models.PostBaseJson">
