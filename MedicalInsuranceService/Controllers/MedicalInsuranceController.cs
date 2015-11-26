@@ -315,12 +315,12 @@ namespace MedicalInsuranceService.Controllers
                 using (OracleConnection con = new OracleConnection(connectionString))
                 {
                     con.Open();
-                    OracleCommand queryCommand = new OracleCommand(command);
+                    OracleCommand queryCommand = new OracleCommand(command,con);
                     OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
                     var reader = queryCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        mapping.Add(reader.GetString(0), reader.GetString(1));
+                        mapping.Add(reader.GetValue(0).ToString(), reader.GetString(1));
                     }
                     cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 }

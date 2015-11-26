@@ -53,7 +53,11 @@ namespace MedicalInsuranceService.Code
         private static string GenConnectString(string as_ds, string as_dbuser, string as_password)
         {
             //return "Data Source=" + as_ds + ";User ID=" + as_dbuser + ";Password=" + as_password + ";Pooling=true;";
-            return "password=" + as_password + ";user id=" + as_dbuser + ";data source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=10.11.74.38)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
+            NameValueCollection app = System.Configuration.ConfigurationManager.AppSettings;
+            String ls_host = app["host"];
+            String ls_port = app["port"];
+            String ls_serviceName = app["serviceName"];
+            return "password=" + as_password + ";user id=" + as_dbuser + ";data source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST="+ls_host+")(PORT="+ls_port+")))(CONNECT_DATA=(SERVICE_NAME="+ls_serviceName+")));";
         }
 
 

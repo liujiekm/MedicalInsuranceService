@@ -7,7 +7,11 @@ using System.Web.Http;
 using MedicalInsuranceService.Models.Maintenance;
 using MedicalInsuranceService.Code;
 using Oracle.ManagedDataAccess.Client;
+//using Oracle.Web.Caching;
+using System.Web.Caching;
+using CacheDependency = System.Web.Caching.CacheDependency;
 using Oracle.Web.Caching;
+
 namespace MedicalInsuranceService.Controllers
 {
     [RoutePrefix("Maintenance")]
@@ -119,14 +123,6 @@ namespace MedicalInsuranceService.Controllers
             return result;
         }
 
-        //[Route("test")]
-        //[HttpGet]
-        //public Dictionary<string, string> test()
-        //{
-        //    MedicalInsuranceController c = new MedicalInsuranceController();
-        //    return c.GetDeptNOs();
-        //}
-
         /// <summary>
         /// 获取对照序列ID
         /// </summary>
@@ -145,5 +141,52 @@ namespace MedicalInsuranceService.Controllers
             return result;
         }
         #endregion
+
+        [Route("test")]
+        [HttpGet]
+        public Dictionary<string, string> test()
+        {
+            string cacheKey = "deptNOs";
+            string command = "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ";
+            var cache = System.Web.HttpContext.Current.Cache;
+            var mapping = new Dictionary<string, string>();
+            if (cache.Get(cacheKey) != null)
+            {
+                mapping = (Dictionary<string, string>)cache.Get(cacheKey);
+            }
+            else
+            {
+                using (OracleConnection con = new OracleConnection(connectionString))
+                {
+                    con.Open();
+                    //CacheDependency cd = GetOracleCacheDependency(command);
+                    OracleCommand queryCommand = new OracleCommand(command, con);
+                    OracleCacheDependency cd = new OracleCacheDependency(queryCommand);
+                    var reader = queryCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        mapping.Add(reader.GetValue(0).ToString(), reader.GetString(1));
+                    }
+                    cache.Add(cacheKey, mapping, cd, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                }
+            }
+            return mapping;
+        }
+
+        public CacheDependency GetOracleCacheDependency(string query)
+        {
+            OracleCacheDependency dependency;
+            //using (OracleConnection con = new OracleConnection(connectionString))
+            //{
+            OracleConnection con = new OracleConnection(connectionString);
+            con.Open();
+            OracleCommand queryCommand = new OracleCommand(query, con);
+            dependency = new OracleCacheDependency(queryCommand);
+            queryCommand.ExecuteReader();
+            //}
+            return dependency;
+        }
     }
+
+
 }
