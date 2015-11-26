@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-
+using MedicalInsuranceService.Filter;
 namespace MedicalInsuranceService
 {
     public static class WebApiConfig
@@ -13,9 +13,10 @@ namespace MedicalInsuranceService
         {
             // Web API 配置和服务
             config.Filters.Add(new ElmahErrorAttribute());
-            config.Formatters.Clear();
-            //config.Formatters.RemoveAt(0);
-            config.Formatters.Add(new JilFormatter());
+            config.Filters.Add(new DeflateCompressionAttribute());
+            config.Formatters.RemoveAt(0);
+            config.Formatters.Insert(0,new JilFormatter());
+            
             // Web API 路由
             config.MapHttpAttributeRoutes();
 
@@ -24,9 +25,6 @@ namespace MedicalInsuranceService
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
-           
-
 
         }
     }

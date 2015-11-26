@@ -35,21 +35,18 @@ namespace MedicalInsuranceService.Controllers
 
         
         private String connectionString;
+        private Options option;
         //private HttpClient client { set; get; }
 
         public MedicalInsuranceController()
         {
             //client = new HttpClient((HttpMessageHandler)new HttpClientHandler(),disposeHandler:false);
             //client.Timeout = TimeSpan.FromSeconds(Int32.Parse(timeOut));
-
             //参数为数据库的用户名
             connectionString = OracleConnectionData.ConnectionString;
+            option = new Options(excludeNulls:true,includeInherited:true);
             
         }
-
-
-
-
 
         #region 通过HTTPClient POST方式调用（平安不支持）
 
@@ -167,6 +164,8 @@ namespace MedicalInsuranceService.Controllers
 
 
 
+        [DllImport("siaudit.dll", CharSet = CharSet.None, ExactSpelling = false)]
+        private static extern int Dlink(StringBuilder auth_token, StringBuilder public_type, StringBuilder content, StringBuilder myapi);
 
 
 
@@ -192,9 +191,9 @@ namespace MedicalInsuranceService.Controllers
         /// <summary>
         /// 通过NCache类库方式设置缓存依赖项
         /// </summary>
-        //public void GetCacheDependency()
+        //public void GetNCacheDependency()
         //{
-        //    var cache = NCache.InitializeCache("test");
+        //    var cache = NCache.InitializeCache("NCache");
         //    String connection = "";
         //    String qureyCommand = "";
         //    CacheDependency orclSync = new OracleCacheDependency(connection, qureyCommand);
@@ -211,10 +210,9 @@ namespace MedicalInsuranceService.Controllers
         [HttpPost]
         public RemindResponseData RemindThroughDll(Content content)
         {
-
             var exception = new Exception();
             RemindResponseData remindResponseData = new RemindResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(content));
+            var postContent = new StringBuilder(JSON.Serialize(content,option));
             try
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Remind), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut)*1000);
@@ -232,9 +230,8 @@ namespace MedicalInsuranceService.Controllers
             }
             else
             {
-                remindResponseData = JSON.Deserialize<RemindResponseData>(postContent.ToString());
+                remindResponseData = JSON.Deserialize<RemindResponseData>(postContent.ToString(),option);
             }
-
             return remindResponseData;
         }
 
@@ -255,20 +252,20 @@ namespace MedicalInsuranceService.Controllers
                 diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
             }
             //医疗类别
-            var medicalTypes = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YLLB'");
+            var medicalTypes = GetMapping("medicalTypes", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YLLB'");
             auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
 
             //剂型类别
-            var doseForms = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JXLB'");
+            var doseForms = GetMapping("doseForms", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JXLB'");
 
             //剂量单位
-            var singleDoseUnits = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JLDW'");
+            var singleDoseUnits = GetMapping("singleDoseUnits", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JLDW'");
 
             //给药途径
-            var deliverWays = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='GYTJ'");
+            var deliverWays = GetMapping("deliverWays", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='GYTJ'");
 
             //药品使用频次
-            var takeFrequences = GetMapping("medicalType", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YPSYPC'");
+            var takeFrequences = GetMapping("takeFrequences", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YPSYPC'");
             foreach (var adviceDetail in auditContent.AdviceDetails)
             {
                 if(!String.IsNullOrEmpty(adviceDetail.DoseForm))
@@ -291,9 +288,6 @@ namespace MedicalInsuranceService.Controllers
                     adviceDetail.TakeFrequence = takeFrequences[adviceDetail.TakeFrequence];
                 }
             }
-
-
-
             return auditContent;
         }
 
@@ -329,7 +323,6 @@ namespace MedicalInsuranceService.Controllers
                         mapping.Add(reader.GetString(0), reader.GetString(1));
                     }
                     cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
-
                 }
             }
             return mapping;
@@ -347,7 +340,7 @@ namespace MedicalInsuranceService.Controllers
         {
             var exception = new Exception();
             AuditResponseData auditResponseData = new AuditResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(Mapping(content)));
+            var postContent = new StringBuilder(JSON.Serialize(Mapping(content), option));
 
             try
             {
@@ -366,21 +359,11 @@ namespace MedicalInsuranceService.Controllers
             }
             else
             {
-                auditResponseData = JSON.Deserialize<AuditResponseData>(postContent.ToString());
+                auditResponseData = JSON.Deserialize<AuditResponseData>(postContent.ToString(),option);
             }
 
             return auditResponseData;
         }
-
-
-
-
-
-
-
-
-
-
 
 
         /// <summary>
@@ -393,7 +376,7 @@ namespace MedicalInsuranceService.Controllers
 
             var exception = new Exception();
             FeedbackResponseData feedbackResponseData = new FeedbackResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(content));
+            var postContent = new StringBuilder(JSON.Serialize(content,option));
 
             try
             {
@@ -413,7 +396,7 @@ namespace MedicalInsuranceService.Controllers
             else
             {
                 
-                feedbackResponseData = JSON.Deserialize<FeedbackResponseData>(postContent.ToString());
+                feedbackResponseData = JSON.Deserialize<FeedbackResponseData>(postContent.ToString(),option);
             }
 
             return feedbackResponseData;
