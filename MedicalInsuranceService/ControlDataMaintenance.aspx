@@ -15,7 +15,7 @@
     <script src="Common/js/selectpick.js"></script>
     <script type="text/javascript">
         //web api 地址
-        var url = "http://localhost:8791/maintenance/";
+        var url = "maintenance/";
 
         $(function () {
             //绑定ko对象
