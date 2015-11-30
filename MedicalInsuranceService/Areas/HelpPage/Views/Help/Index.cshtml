@@ -6,7 +6,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "ASP.NET Web API Help Page";
+    ViewBag.Title = "阳光医保智能审核系统事前审核接口文档 Web API 帮助页面";
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -23,9 +23,9 @@
 <div id="body" class="help-page">
     <section class="featured">
         <div class="content-wrapper">
-            <h2>Introduction</h2>
+            <h2>介绍</h2>
             <p>
-                Provide a general description of your APIs here.
+                阳光医保智能审核系统服务（提醒【Remind】、审核【Audit】、反馈【Feedback】）
             </p>
         </div>
     </section>

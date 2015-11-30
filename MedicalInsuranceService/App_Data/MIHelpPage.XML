@@ -569,9 +569,11 @@
             <returns></returns>
         </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.RemindThroughDll(MedicalInsuranceService.Models.Content)">
-             <summary>
-            调用阳光医保提示服务
-             </summary>
+            <summary>
+            调用阳光医保提示（Remind）服务
+            </summary>
+            <param name="content">提示服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <returns>提示服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.Mapping(MedicalInsuranceService.Models.Audit.AuditContent)">
             <summary>
@@ -588,14 +590,18 @@
             <returns></returns>
         </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Audit.AuditContent)">
-             <summary>
-            调用阳光医保审核服务
-             </summary>
+            <summary>
+            调用阳光医保审核（Audit）服务
+            </summary>
+            <param name="content">审核服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <returns>审核服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Feedback.FeedbackContent)">
-             <summary>
-            调用阳光医保反馈服务
-             </summary>
+            <summary>
+            调用阳光医保反馈（Feedback）服务
+            </summary>
+            <param name="content">反馈服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <returns>反馈服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         </member>
         <member name="T:MedicalInsuranceService.Formatter.JilFormatter">
             <summary>

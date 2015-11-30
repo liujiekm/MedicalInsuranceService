@@ -11,6 +11,7 @@ using Oracle.ManagedDataAccess.Client;
 using System.Web.Caching;
 using CacheDependency = System.Web.Caching.CacheDependency;
 using Oracle.Web.Caching;
+using System.Web.Http.Description;
 
 namespace MedicalInsuranceService.Controllers
 {
@@ -38,6 +39,7 @@ namespace MedicalInsuranceService.Controllers
         /// <returns></returns>
         [Route("GetControl")]
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public List<Maintenance> GetControl()
         {
             List<Maintenance> list = new List<Maintenance>();
@@ -71,6 +73,7 @@ namespace MedicalInsuranceService.Controllers
         /// <returns></returns>
         [Route("DeleteControl/{controlID}")]
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public int DeleteControl(int controlID)
         {
             int result = 0;
@@ -92,6 +95,7 @@ namespace MedicalInsuranceService.Controllers
         /// <returns></returns>
         [Route("SaveControl")]
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public int SaveControl(Maintenance maintenance)
         {
             int result = 0;
@@ -127,6 +131,7 @@ namespace MedicalInsuranceService.Controllers
         /// 获取对照序列ID
         /// </summary>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public int GetControlID()
         {
             int result = 0;
@@ -144,6 +149,7 @@ namespace MedicalInsuranceService.Controllers
 
         [Route("test")]
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public Dictionary<string, string> test()
         {
             string cacheKey = "deptNOs";
@@ -173,6 +179,8 @@ namespace MedicalInsuranceService.Controllers
             return mapping;
         }
 
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         public CacheDependency GetOracleCacheDependency(string query)
         {
             OracleCacheDependency dependency;

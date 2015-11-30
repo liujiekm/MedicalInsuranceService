@@ -23,10 +23,11 @@ using System.Text;
 using Jil;
 using MedicalInsuranceService.Code;
 using System.ComponentModel;
+using System.Web.Http.Description;
 
 namespace MedicalInsuranceService.Controllers
 {
-    [RoutePrefix("MI")]
+    [RoutePrefix("MIS")]
     public class MedicalInsuranceController : ApiController
     {
         private readonly string baseUrl = ConfigurationManager.AppSettings["baseUrl"];
@@ -178,6 +179,7 @@ namespace MedicalInsuranceService.Controllers
         /// </summary>
         /// <param name="query">查询命令</param>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public CacheDependency GetOracleCacheDependency(string query)
         {
             OracleConnection con = new OracleConnection(connectionString);
@@ -203,9 +205,12 @@ namespace MedicalInsuranceService.Controllers
 
 
 
+
         /// <summary>
-        ///调用阳光医保提示服务
+        /// 调用阳光医保提示（Remind）服务
         /// </summary>
+        /// <param name="content">提示服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+        /// <returns>提示服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         [Route("Remind")]
         [HttpPost]
         public RemindResponseData RemindThroughDll(Content content)
@@ -240,6 +245,7 @@ namespace MedicalInsuranceService.Controllers
         /// </summary>
         /// <param name="auditContent"></param>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public AuditContent Mapping(AuditContent auditContent)
         {
             //科室医保编号
@@ -252,20 +258,20 @@ namespace MedicalInsuranceService.Controllers
                 diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
             }
             //医疗类别
-            var medicalTypes = GetMapping("medicalTypes", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YLLB'");
+            var medicalTypes = GetMapping("medicalTypes", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='yllb' AND ZTBZ=1");
             auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
 
             //剂型类别
-            var doseForms = GetMapping("doseForms", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JXLB'");
+            var doseForms = GetMapping("doseForms", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jxlb' AND ZTBZ=1 ");
 
             //剂量单位
-            var singleDoseUnits = GetMapping("singleDoseUnits", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='JLDW'");
+            var singleDoseUnits = GetMapping("singleDoseUnits", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jldw' AND ZTBZ=1 ");
 
             //给药途径
-            var deliverWays = GetMapping("deliverWays", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='GYTJ'");
+            var deliverWays = GetMapping("deliverWays", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='gytj' AND ZTBZ=1 ");
 
             //药品使用频次
-            var takeFrequences = GetMapping("takeFrequences", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='YPSYPC'");
+            var takeFrequences = GetMapping("takeFrequences", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='ypsypc' AND ZTBZ=1 ");
             foreach (var adviceDetail in auditContent.AdviceDetails)
             {
                 if(!String.IsNullOrEmpty(adviceDetail.DoseForm))
@@ -302,6 +308,7 @@ namespace MedicalInsuranceService.Controllers
         /// 通过配置缓存依赖，保证缓存的实时更新
         /// </summary>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public Dictionary<string, string> GetMapping(string cacheKey,string command)
         {
             var cache = HttpContext.Current.Cache;
@@ -332,8 +339,10 @@ namespace MedicalInsuranceService.Controllers
 
 
         /// <summary>
-        ///调用阳光医保审核服务
+        /// 调用阳光医保审核（Audit）服务
         /// </summary>
+        /// <param name="content">审核服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+        /// <returns>审核服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         [Route("Audit")]
         [HttpPost]
         public AuditResponseData FeedbackThroughDll(AuditContent content)
@@ -366,9 +375,12 @@ namespace MedicalInsuranceService.Controllers
         }
 
 
+
         /// <summary>
-        ///调用阳光医保反馈服务
+        /// 调用阳光医保反馈（Feedback）服务
         /// </summary>
+        /// <param name="content">反馈服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+        /// <returns>反馈服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         [Route("Feedback")]
         [HttpPost]
         public FeedbackResponseData FeedbackThroughDll(FeedbackContent content)
