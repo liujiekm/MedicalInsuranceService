@@ -34,7 +34,7 @@ namespace MedicalInsuranceService.Controllers
         private readonly string authToken = ConfigurationManager.AppSettings["auth_token"];
         private readonly string timeOut = ConfigurationManager.AppSettings["timeout"];
 
-        
+
         private String connectionString;
         private Options option;
         //private HttpClient client { set; get; }
@@ -45,8 +45,8 @@ namespace MedicalInsuranceService.Controllers
             //client.Timeout = TimeSpan.FromSeconds(Int32.Parse(timeOut));
             //参数为数据库的用户名
             connectionString = OracleConnectionData.ConnectionString;
-            option = new Options(excludeNulls:true,includeInherited:true);
-            
+            option = new Options(excludeNulls: true, includeInherited: true);
+
         }
 
         #region 通过HTTPClient POST方式调用（平安不支持）
@@ -217,25 +217,18 @@ namespace MedicalInsuranceService.Controllers
         {
             var exception = new Exception();
             RemindResponseData remindResponseData = new RemindResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(content,option));
+            var postContent = new StringBuilder(JSON.Serialize(content, option));
             try
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Remind), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut)*1000);
+                remindResponseData = JSON.Deserialize<RemindResponseData>(postContent.ToString(),option);
             }
             catch (Win32Exception ex)
             {
-                exception = ex;
-            }
-           
-            if(exception!=null)
-            {
+                //exception = ex;
                 remindResponseData.Success = "F";
                 remindResponseData.ErrorCode = "";
-                remindResponseData.ErrorMsg = exception.Message;
-            }
-            else
-            {
-                remindResponseData = JSON.Deserialize<RemindResponseData>(postContent.ToString(),option);
+                remindResponseData.ErrorMsg = ex.Message;
             }
             return remindResponseData;
         }
@@ -248,48 +241,55 @@ namespace MedicalInsuranceService.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public AuditContent Mapping(AuditContent auditContent)
         {
-            //科室医保编号
-            var deptNOs = GetMapping("deptNOs", "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ");
-            auditContent.MedicalDeptCode = deptNOs[auditContent.MedicalDeptCode];
-            var diagnoses = GetMapping("diagnoses", "SELECT JBID,SBBM FROM YL_ZD");
+            //科室医保编号   PB端处理
+            //var deptNOs = GetMapping("deptNOs", "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ");
+            //auditContent.MedicalDeptCode = deptNOs[auditContent.MedicalDeptCode];
+            var diagnoses = GetMapping("diagnoses", "SELECT JBID,SBBM FROM YLGZ3.YL_ZD");
             //诊断代码
             foreach (var diagnose in auditContent.Diagnoses)
             {
-                diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
+                if (diagnoses.ContainsKey(diagnose.DiagnoseCode))
+                {
+                    diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
+                }
             }
             //医疗类别
-            var medicalTypes = GetMapping("medicalTypes", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='yllb' AND ZTBZ=1");
-            auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
+            var medicalTypes = GetMapping("medicalTypes", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='yllb' AND ZTBZ=1");
+            if (medicalTypes.ContainsKey(auditContent.MedicineType))
+            {
+                auditContent.MedicineType = medicalTypes[auditContent.MedicineType];   
+            }
 
             //剂型类别
-            var doseForms = GetMapping("doseForms", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jxlb' AND ZTBZ=1 ");
+            var doseForms = GetMapping("doseForms", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jxlb' AND ZTBZ=1 ");
 
             //剂量单位
-            var singleDoseUnits = GetMapping("singleDoseUnits", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jldw' AND ZTBZ=1 ");
+            var singleDoseUnits = GetMapping("singleDoseUnits", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jldw' AND ZTBZ=1 ");
 
             //给药途径
-            var deliverWays = GetMapping("deliverWays", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='gytj' AND ZTBZ=1 ");
+            var deliverWays = GetMapping("deliverWays", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='gytj' AND ZTBZ=1 ");
 
             //药品使用频次
-            var takeFrequences = GetMapping("takeFrequences", "SELECT BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='ypsypc' AND ZTBZ=1 ");
+            var takeFrequences = GetMapping("takeFrequences", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='ypsypc' AND ZTBZ=1 ");
             foreach (var adviceDetail in auditContent.AdviceDetails)
             {
-                if(!String.IsNullOrEmpty(adviceDetail.DoseForm))
+                //if (!String.IsNullOrEmpty(adviceDetail.DoseForm))
+                if (doseForms.ContainsKey(adviceDetail.DoseForm))
                 {
                     adviceDetail.DoseForm = doseForms[adviceDetail.DoseForm];
                 }
 
-                if (!String.IsNullOrEmpty(adviceDetail.SingleDoseUnit))
+                if (singleDoseUnits.ContainsKey(adviceDetail.SingleDoseUnit))
                 {
                     adviceDetail.SingleDoseUnit = singleDoseUnits[adviceDetail.SingleDoseUnit];
                 }
 
-                if (!String.IsNullOrEmpty(adviceDetail.DeliverWay))
+                if (deliverWays.ContainsKey(adviceDetail.DeliverWay))
                 {
                     adviceDetail.DeliverWay = deliverWays[adviceDetail.DeliverWay];
                 }
 
-                if (!String.IsNullOrEmpty(adviceDetail.TakeFrequence))
+                if (takeFrequences.ContainsKey(adviceDetail.TakeFrequence))
                 {
                     adviceDetail.TakeFrequence = takeFrequences[adviceDetail.TakeFrequence];
                 }
@@ -309,7 +309,7 @@ namespace MedicalInsuranceService.Controllers
         /// </summary>
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)]
-        public Dictionary<string, string> GetMapping(string cacheKey,string command)
+        public Dictionary<string, string> GetMapping(string cacheKey, string command)
         {
             var cache = HttpContext.Current.Cache;
             var mapping = new Dictionary<string, string>();
@@ -322,12 +322,12 @@ namespace MedicalInsuranceService.Controllers
                 using (OracleConnection con = new OracleConnection(connectionString))
                 {
                     con.Open();
-                    OracleCommand queryCommand = new OracleCommand(command,con);
+                    OracleCommand queryCommand = new OracleCommand(command, con);
                     OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
                     var reader = queryCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        mapping.Add(reader.GetValue(0).ToString(), reader.GetString(1));
+                        mapping.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
                     }
                     cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 }
@@ -349,26 +349,18 @@ namespace MedicalInsuranceService.Controllers
         {
             var exception = new Exception();
             AuditResponseData auditResponseData = new AuditResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(Mapping(content), option));
-
             try
             {
+                var postContent = new StringBuilder(JSON.Serialize(Mapping(content), option));
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Audit), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut) * 1000);
+                auditResponseData = JSON.Deserialize<AuditResponseData>(postContent.ToString(), option);
             }
             catch (Win32Exception ex)
             {
-                exception = ex;
-            }
-
-            if (exception != null)
-            {
+                //exception = ex;
                 auditResponseData.Success = "F";
                 auditResponseData.ErrorCode = "";
-                auditResponseData.ErrorMsg =exception.Message;
-            }
-            else
-            {
-                auditResponseData = JSON.Deserialize<AuditResponseData>(postContent.ToString(),option);
+                auditResponseData.ErrorMsg = ex.Message;
             }
 
             return auditResponseData;
@@ -388,32 +380,20 @@ namespace MedicalInsuranceService.Controllers
 
             var exception = new Exception();
             FeedbackResponseData feedbackResponseData = new FeedbackResponseData();
-            var postContent = new StringBuilder(JSON.Serialize(content,option));
-
+            var postContent = new StringBuilder(JSON.Serialize(content, option));
             try
             {
                 Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Feedback), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut) * 1000);
+                feedbackResponseData = JSON.Deserialize<FeedbackResponseData>(postContent.ToString(),option);
             }
             catch (Win32Exception ex)
             {
-                exception = ex;
-            }
-
-            if (exception != null)
-            {
+                //exception = ex;
                 feedbackResponseData.Success = "F";
                 feedbackResponseData.ErrorCode = "";
-                feedbackResponseData.ErrorMsg = exception.Message;
+                feedbackResponseData.ErrorMsg = ex.Message;
             }
-            else
-            {
-                
-                feedbackResponseData = JSON.Deserialize<FeedbackResponseData>(postContent.ToString(),option);
-            }
-
             return feedbackResponseData;
         }
-
-
     }
 }

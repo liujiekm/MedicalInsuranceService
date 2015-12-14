@@ -54,12 +54,12 @@ namespace MedicalInsuranceService.Controllers
                 {
                     Maintenance maintenance = new Maintenance();
                     maintenance.ControlID = reader.GetInt32(0);
-                    maintenance.SocialSecurityCode = reader.GetString(1);
-                    maintenance.LocalCode = reader.GetString(2);
-                    maintenance.EnglishName = reader.GetString(3);
-                    maintenance.ChineseName = reader.GetString(4);
-                    maintenance.Type = reader.GetString(5);
-                    maintenance.Description = reader.GetString(6);
+                    maintenance.SocialSecurityCode = reader.GetValue(1).ToString();
+                    maintenance.LocalCode = reader.GetValue(2).ToString();
+                    maintenance.EnglishName = reader.GetValue(3).ToString();
+                    maintenance.ChineseName = reader.GetValue(4).ToString();
+                    maintenance.Type = reader.GetValue(5).ToString();
+                    maintenance.Description = reader.GetValue(6).ToString();
                     list.Add(maintenance);
                 }
             }
