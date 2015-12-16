@@ -36,6 +36,11 @@ namespace MedicalInsuranceService.Models.Audit
         [JilDirective(Name = "project_name")]
         public String ProjectName { get; set; }
 
+        /// <summary>
+        /// 项目类别，1：药品，2：诊疗
+        /// </summary>
+        [JilDirective(Name="xmlb")]
+        public string ProjectType { get; set; }
 
         /// <summary>
         /// recipe_no

@@ -300,9 +300,11 @@
     <Compile Include="Models\Audit\AuditResult.cs" />
     <Compile Include="Models\Audit\Diagnose.cs" />
     <Compile Include="Models\Content.cs" />
+    <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\Feedback\FeedbackContent.cs" />
     <Compile Include="Models\Feedback\FeedbackPostData.cs" />
     <Compile Include="Models\Feedback\FeedbackResponseData.cs" />
+    <Compile Include="Models\FeesProject.cs" />
     <Compile Include="Models\Maintenance\Maintenance.cs" />
     <Compile Include="Models\PostBaseJson.cs" />
     <Compile Include="Models\PublicType.cs" />

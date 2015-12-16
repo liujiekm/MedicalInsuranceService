@@ -40,7 +40,7 @@ namespace MedicalInsuranceService.Models
 
         /// <summary>
         /// doctor_code		 
-        /// 医师编号（使用医保医生编号）
+        /// 医师编号（使用医院医生编号）
         /// </summary>
         [JilDirective(Name = "doctor_code")]
         public String  DoctorCode { get; set; }
