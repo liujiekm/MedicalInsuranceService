@@ -79,14 +79,14 @@ namespace MedicalInsuranceService.Models.Audit
         /// 单价，必须使用数值型，如”12.5”
         /// </summary>
         [JilDirective(Name = "price")]
-        public float Price { get; set; }
+        public string Price { get; set; }
 
         /// <summary>
         /// medical_number	
         /// 数量，必须使用数值型，如”10”
         /// </summary>
         [JilDirective(Name = "medical_number")]
-        public float MedicalNumber { get; set; }
+        public string MedicalNumber { get; set; }
 
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace MedicalInsuranceService.Models.Audit
         /// 金额，必须使用数值型，如”50.5”
         /// </summary>
         [JilDirective(Name = "amount")]
-        public float Amount { get; set; }
+        public string Amount { get; set; }
 
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace MedicalInsuranceService.Models.Audit
         /// 用药天数（项目为药品时非空），医嘱服用该药品天数，必须使用数值型，如”15”
         /// </summary>
         [JilDirective(Name = "use_day")]
-        public float UseDay { get; set; }
+        public string UseDay { get; set; }
 
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace MedicalInsuranceService.Models.Audit
         /// 单次用药量（项目为药品时非空），配合下一个字段的单位，如 50 mg，必须使用数值型，如”50”
         /// </summary>
         [JilDirective(Name = "single_dose_number")]
-        public float SingleDoseNumber { get; set; }
+        public string SingleDoseNumber { get; set; }
 
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace MedicalInsuranceService.Models.Audit
         /// 取药总量（项目为药品时非空），配合下一个字段的单位，如 500 mg，必须使用数值型，如”500”
         /// </summary>
         [JilDirective(Name = "take_medical_number")]
-        public float TakeMedicalNumber { get; set; }
+        public string TakeMedicalNumber { get; set; }
 
         /// <summary>
         /// take_medical_unit
@@ -148,7 +148,7 @@ namespace MedicalInsuranceService.Models.Audit
         /// 药量天数（项目为药品时非空），依据医嘱服药要求，所配药品患者可以服用的天数，必须使用数值型，如”5”
         /// </summary>
         [JilDirective(Name = "dose_day")]
-        public float DoseDay { get; set; }
+        public string DoseDay { get; set; }
 
 
         /// <summary>

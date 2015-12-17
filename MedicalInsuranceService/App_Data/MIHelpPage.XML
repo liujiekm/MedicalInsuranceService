@@ -575,6 +575,20 @@
             <param name="content">提示服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
             <returns>提示服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Audit.AuditContent)">
+            <summary>
+            调用阳光医保审核（Audit）服务
+            </summary>
+            <param name="content">审核服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <returns>审核服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
+        </member>
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Feedback.FeedbackContent)">
+            <summary>
+            调用阳光医保反馈（Feedback）服务
+            </summary>
+            <param name="content">反馈服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <returns>反馈服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
+        </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.Mapping(MedicalInsuranceService.Models.Audit.AuditContent)">
             <summary>
             修改医保相关字段
@@ -589,19 +603,23 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Audit.AuditContent)">
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetDoctorCode(System.String,System.String,System.String)">
             <summary>
-            调用阳光医保审核（Audit）服务
+            根据本地医生id，以及就诊卡号，获取医生社保代码
             </summary>
-            <param name="content">审核服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
-            <returns>审核服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
+            <param name="doctorCode">本地医生id</param>
+            <param name="unitCode">单位代码</param>
+            <param name="externalCode">外部编码</param>
+            <returns></returns>
         </member>
-        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Feedback.FeedbackContent)">
+        <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.GetProject(System.String,System.String,System.String)">
             <summary>
-            调用阳光医保反馈（Feedback）服务
+            获取收费项目对应的社保项目编号
             </summary>
-            <param name="content">反馈服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
-            <returns>反馈服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
+            <param name="hospitalCode">医院内部编码</param>
+            <param name="settlementType">结算类型</param>
+            <param name="projectType">项目类型</param>
+            <returns></returns>
         </member>
         <member name="T:MedicalInsuranceService.Formatter.JilFormatter">
             <summary>
@@ -629,6 +647,11 @@
             <summary>
             project_name
             项目名称
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.ProjectType">
+            <summary>
+            项目类别，1：药品，2：诊疗
             </summary>
         </member>
         <member name="P:MedicalInsuranceService.Models.Audit.AdviceDetail.RecipeNo">
@@ -883,7 +906,7 @@
         <member name="P:MedicalInsuranceService.Models.Content.DoctorCode">
             <summary>
             doctor_code		 
-            医师编号（使用医保医生编号）
+            医师编号（使用医院医生编号）
             </summary>
         </member>
         <member name="P:MedicalInsuranceService.Models.Content.DoctorName">
@@ -892,6 +915,22 @@
             医师姓名
             </summary>
         </member>
+        <member name="T:MedicalInsuranceService.Models.Doctor">
+            <summary>
+            社保医生
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Doctor.DoctorCode">
+            <summary>
+            社保医生编号
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.Doctor.DoctorID">
+            <summary>
+            本地医生ID
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:MedicalInsuranceService.Models.Doctor.InterfaceCode" -->
         <member name="T:MedicalInsuranceService.Models.Feedback.FeedbackContent">
             <summary>
             反馈服务的请求数据内容主体
@@ -933,6 +972,31 @@
         <member name="P:MedicalInsuranceService.Models.Feedback.FeedbackResponseData.Result">
             <summary>
             result 字段
+            </summary>
+        </member>
+        <member name="T:MedicalInsuranceService.Models.FeesProject">
+            <summary>
+            收费项目
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.FeesProject.ControlCode">
+            <summary>
+            对照代码
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.FeesProject.SettlementType">
+            <summary>
+            结算类型
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.FeesProject.ProjectType">
+            <summary>
+            项目类型
+            </summary>
+        </member>
+        <member name="P:MedicalInsuranceService.Models.FeesProject.ProjectCode">
+            <summary>
+            项目代码
             </summary>
         </member>
         <member name="T:MedicalInsuranceService.Models.Maintenance.Maintenance">

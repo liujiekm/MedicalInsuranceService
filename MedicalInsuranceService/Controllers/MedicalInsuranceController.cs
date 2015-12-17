@@ -163,17 +163,11 @@ namespace MedicalInsuranceService.Controllers
 
         #endregion
 
-
-
-
         [DllImport("siaudit.dll", CharSet = CharSet.None, ExactSpelling = false)]
         private static extern int Dlink(StringBuilder auth_token, StringBuilder public_type, StringBuilder content, StringBuilder myapi);
 
-
-
         [DllImport("siaudit.dll", CharSet = CharSet.None, ExactSpelling = false)]
         private static extern int Dlink(StringBuilder auth_token, StringBuilder public_type, StringBuilder content, StringBuilder myapi, Int32 timeout);
-
 
         /// <summary>
         /// 创建缓存依赖项
@@ -204,13 +198,10 @@ namespace MedicalInsuranceService.Controllers
         //    cache.Insert("", "", orclSync, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, Alachisoft.NCache.Runtime.CacheItemPriority.Normal);
         //}
 
-
-
-
         /// <summary>
         /// 调用阳光医保提示（Remind）服务
         /// </summary>
-        /// <param name="content">提示服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+        /// <param name="content">card_no：社保卡号，必传。medical_dept_name：院内科室代码。doctor_code：院内医生编码</param>
         /// <returns>提示服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         [Route("Remind")]
         [HttpPost]
@@ -261,8 +252,6 @@ namespace MedicalInsuranceService.Controllers
 
             return auditResponseData;
         }
-
-
 
         /// <summary>
         /// 调用阳光医保反馈（Feedback）服务
@@ -315,7 +304,7 @@ namespace MedicalInsuranceService.Controllers
             //把本地医生编号转换为社保医生编号
             content.DoctorCode = GetDoctorCode(content.DoctorCode, unitCode, externalCode);
             //将科室转换为社保科室代码
-            var deptNOs = GetMapping("deptNOs", "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ");
+            var deptNOs = GetMapping("deptNOs", "SELECT distinct ZKID,SBKSDM FROM CW_YB_KSDZ");
             if (deptNOs.ContainsKey(content.MedicalDeptCode))
             {
                 content.MedicalDeptCode = deptNOs[content.MedicalDeptCode];
@@ -354,12 +343,12 @@ namespace MedicalInsuranceService.Controllers
             auditContent.DoctorCode = GetDoctorCode(auditContent.DoctorCode, unitCode, externalCode);
 
             //科室医保编号   PB端处理
-            var deptNOs = GetMapping("deptNOs", "SELECT ZKID,SBKSDM FROM CW_YB_KSDZ");
+            var deptNOs = GetMapping("deptNOs", "SELECT distinct ZKID,SBKSDM FROM CW_YB_KSDZ");
             if (deptNOs.ContainsKey(auditContent.MedicalDeptCode))
             {
                 auditContent.MedicalDeptCode = deptNOs[auditContent.MedicalDeptCode];
             }
-            var diagnoses = GetMapping("diagnoses", "SELECT ICD,SBBM FROM YLGZ3.YL_ZD");
+            var diagnoses = GetMapping("diagnoses", "SELECT distinct ICD,SBBM FROM YLGZ3.YL_ZD");
             //诊断代码
             foreach (var diagnose in auditContent.Diagnoses)
             {
@@ -387,18 +376,25 @@ namespace MedicalInsuranceService.Controllers
             //药品使用频次
             var takeFrequences = GetMapping("takeFrequences", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='ypsypc' AND ZTBZ=1 ");
 
-            if (unitCode.Substring(0,1)=="A")
+            if (unitCode!="")
             {
-                settlementType = "02";
-            }
-            else
-            {
-                settlementType = "01";
+                if (unitCode.Substring(0, 1) == "A")
+                {
+                    settlementType = "02";
+                }
+                else
+                {
+                    settlementType = "01";
+                }   
             }
 
             foreach (var adviceDetail in auditContent.AdviceDetails)
             {
-                //if (!String.IsNullOrEmpty(adviceDetail.DoseForm))
+                if (adviceDetail.HospitalCode != "0")
+                {
+                    adviceDetail.ProjectCode = GetProject(adviceDetail.HospitalCode, settlementType, adviceDetail.ProjectType == "1" ? "yp" : "zl");
+                }
+
                 if (doseForms.ContainsKey(adviceDetail.DoseForm))
                 {
                     adviceDetail.DoseForm = doseForms[adviceDetail.DoseForm];
@@ -421,12 +417,6 @@ namespace MedicalInsuranceService.Controllers
             }
             return auditContent;
         }
-
-
-
-
-
-
 
         /// <summary>
         /// 获取通过查询命令command获取医保编码映射关系
@@ -452,7 +442,10 @@ namespace MedicalInsuranceService.Controllers
                     var reader = queryCommand.ExecuteReader();
                     while (reader.Read())
                     {
-                        mapping.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
+                        if (!mapping.ContainsKey(reader.GetValue(0).ToString()))
+                        {
+                            mapping.Add(reader.GetValue(0).ToString(), reader.GetValue(1).ToString());
+                        }
                     }
                     cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 }
@@ -467,67 +460,71 @@ namespace MedicalInsuranceService.Controllers
         /// <param name="unitCode">单位代码</param>
         /// <param name="externalCode">外部编码</param>
         /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public string GetDoctorCode(string doctorCode, string unitCode, string externalCode)
         {
             //接口代码
             string interfaceCode = "";
-
-            //如果单位代码以A打头，则表示居民医保;如果是Y打头，则表示职工医保
-            if (unitCode.Substring(0, 1) == "A")
+            if (unitCode != "" && externalCode != "")
             {
-                interfaceCode = "xcjm";
-            }
-            else if (unitCode.Substring(0, 1) == "Y")
-            {
-                interfaceCode = "xczg";
-            }
-
-            //如果外部编号不包含“-”，则表示本级,如果包含，则表示市内或者异地，如果是3306打头的是sn，否则认为是yd
-            if (externalCode.IndexOf('-') < 0)
-            {
-                interfaceCode += "_bj";
-            }
-            else if (externalCode.Substring(0, 4) == "3306")
-            {
-                interfaceCode += "_sn";
-            }
-            else
-            {
-                interfaceCode += "_yd";
-            }
-
-            string cacheKey = "doctorCode";
-            var cache = HttpContext.Current.Cache;
-            var mapping = new List<Doctor>();
-            if (cache.Get(cacheKey) != null)
-            {
-                mapping = (List<Doctor>)cache.Get(cacheKey);
-            }
-            else
-            {
-                using (OracleConnection con = new OracleConnection(connectionString))
+                //如果单位代码以A打头，则表示居民医保;如果是Y打头，则表示职工医保
+                if (unitCode.Substring(0, 1) == "A")
                 {
-                    con.Open();
-                    string sql = "Select sbysdm,ysid,jkdm from cw_yb_ysxx";
-                    OracleCommand queryCommand = new OracleCommand(sql, con);
-                    OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
-                    var reader = queryCommand.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        Doctor doctor = new Doctor();
-                        doctor.DoctorCode = reader.GetValue(0).ToString();
-                        doctor.DoctorID = reader.GetValue(1).ToString();
-                        doctor.InterfaceCode = reader.GetValue(2).ToString();
-                        mapping.Add(doctor);
-                    }
-                    cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                    interfaceCode = "xcjm";
                 }
-            }
+                else if (unitCode.Substring(0, 1) == "Y")
+                {
+                    interfaceCode = "xczg";
+                }
 
-            Doctor currentDoctor = mapping.Find(p => p.DoctorID == doctorCode && p.InterfaceCode == interfaceCode);
-            if (currentDoctor != null)
-            {
-                doctorCode = currentDoctor.DoctorCode;
+                //如果外部编号不包含“-”，则表示本级,如果包含，则表示市内或者异地，如果是3306打头的是sn，否则认为是yd
+                if (externalCode.IndexOf('-') < 0)
+                {
+                    interfaceCode += "_bj";
+                }
+                else if (externalCode.Substring(0, 4) == "3306")
+                {
+                    interfaceCode += "_sn";
+                }
+                else
+                {
+                    interfaceCode += "_yd";
+                }
+
+                string cacheKey = "doctorCode";
+                var cache = HttpContext.Current.Cache;
+                var mapping = new List<Doctor>();
+                if (cache.Get(cacheKey) != null)
+                {
+                    mapping = (List<Doctor>)cache.Get(cacheKey);
+                }
+                else
+                {
+                    using (OracleConnection con = new OracleConnection(connectionString))
+                    {
+                        con.Open();
+                        string sql = "Select sbysdm,ysid,jkdm from cw_yb_ysxx";
+                        OracleCommand queryCommand = new OracleCommand(sql, con);
+                        OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
+                        var reader = queryCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Doctor doctor = new Doctor();
+                            doctor.DoctorCode = reader.GetValue(0).ToString();
+                            doctor.DoctorID = reader.GetValue(1).ToString();
+                            doctor.InterfaceCode = reader.GetValue(2).ToString();
+                            mapping.Add(doctor);
+                        }
+                        cache.Add(cacheKey, mapping, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                    }
+                }
+
+                Doctor currentDoctor = mapping.Find(p => p.DoctorID == doctorCode && p.InterfaceCode == interfaceCode);
+                if (currentDoctor != null)
+                {
+                    doctorCode = currentDoctor.DoctorCode;
+                }
+
             }
             return doctorCode;
         }
@@ -539,7 +536,8 @@ namespace MedicalInsuranceService.Controllers
         /// <param name="settlementType">结算类型</param>
         /// <param name="projectType">项目类型</param>
         /// <returns></returns>
-        public string GetProject(string hospitalCode, string settlementType,string projectType)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public string GetProject(string hospitalCode, string settlementType, string projectType)
         {
             string controlCode = "";
             string cacheKey = "projectCode";
@@ -571,8 +569,8 @@ namespace MedicalInsuranceService.Controllers
                 }
             }
 
-            FeesProject project = mapping.Find(p => p.ProjectType == projectType && p.ProjectCode == hospitalCode&&p.SettlementType==settlementType);
-            if (project!=null)
+            FeesProject project = mapping.Find(p => p.ProjectType == projectType && p.ProjectCode == hospitalCode && p.SettlementType == settlementType);
+            if (project != null)
             {
                 controlCode = project.ControlCode;
             }
