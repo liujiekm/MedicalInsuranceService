@@ -572,7 +572,7 @@
             <summary>
             调用阳光医保提示（Remind）服务
             </summary>
-            <param name="content">提示服务请求参数，详见《平安智慧医保智能审核系统事前审核接口文档》</param>
+            <param name="content">card_no：社保卡号，必传。medical_dept_name：院内科室代码。doctor_code：院内医生编码</param>
             <returns>提示服务返回参数，详见《平安智慧医保智能审核系统事前审核接口文档》</returns>
         </member>
         <member name="M:MedicalInsuranceService.Controllers.MedicalInsuranceController.FeedbackThroughDll(MedicalInsuranceService.Models.Audit.AuditContent)">

@@ -253,6 +253,29 @@ namespace MedicalInsuranceService.Controllers
             return auditResponseData;
         }
 
+        [Route("AuditTest")]
+        [HttpPost]
+        public AuditContent AuditTestThroughDll(AuditContent content)
+        {
+            var exception = new Exception();
+            AuditContent auditResponseData = new AuditContent();
+            try
+            {
+                var postContent = new StringBuilder(JSON.Serialize(Mapping(content), option));
+                //Dlink(new StringBuilder(authToken), new StringBuilder(PublicType.Audit), postContent, new StringBuilder(baseUrl), Int32.Parse(timeOut) * 1000);
+                auditResponseData = JSON.Deserialize<AuditContent>(postContent.ToString(), option);
+            }
+            catch (Win32Exception ex)
+            {
+                //exception = ex;
+                //auditResponseData.Success = "F";
+                //auditResponseData.ErrorCode = "";
+                //auditResponseData.ErrorMsg = ex.Message;
+            }
+
+            return auditResponseData;
+        }
+
         /// <summary>
         /// 调用阳光医保反馈（Feedback）服务
         /// </summary>
@@ -327,6 +350,7 @@ namespace MedicalInsuranceService.Controllers
             //结算类型
             string settlementType = "";
 
+            //获取外部代码跟单位代码
             string sql = "Select dwdm,wbbh from cw_khxx where brbh ='" + auditContent.CardNo + "'";
             using (OracleConnection con = new OracleConnection(connectionString))
             {
@@ -338,7 +362,35 @@ namespace MedicalInsuranceService.Controllers
                     unitCode = reader.GetValue(0).ToString();
                     externalCode = reader.GetValue(1).ToString();
                 }
+
             }
+
+            //转换医疗类别，如果就诊类型是门诊，并且是普通门诊的话要判断是否为慢病
+            if (auditContent.VisitType == "2")
+            {
+                if (auditContent.MedicineType == "02")
+                {
+                    sql = "select count(*) from yl_zlhd where zlhdid="+auditContent.VisitNo+" and tbbm is not null";
+                    using (OracleConnection con=new OracleConnection(connectionString))
+                    {
+                        con.Open();
+                        OracleCommand command = new OracleCommand(sql,con);
+                        int result =Int32.Parse(command.ExecuteScalar().ToString());
+                        //如果大于0表示慢病
+                        if (result>0)
+                        {
+                            auditContent.MedicineType = "03";
+                        }
+                    }
+                }
+            }
+            var medicalTypes = GetMapping("medicalTypes", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='yllb' AND ZTBZ=1");
+            if (medicalTypes.ContainsKey(auditContent.MedicineType))
+            {
+                auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
+            }
+
+
             //把本地医生编号转换为社保医生编号
             auditContent.DoctorCode = GetDoctorCode(auditContent.DoctorCode, unitCode, externalCode);
 
@@ -357,12 +409,6 @@ namespace MedicalInsuranceService.Controllers
                     diagnose.DiagnoseCode = diagnoses[diagnose.DiagnoseCode];
                 }
             }
-            //医疗类别
-            var medicalTypes = GetMapping("medicalTypes", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='yllb' AND ZTBZ=1");
-            if (medicalTypes.ContainsKey(auditContent.MedicineType))
-            {
-                auditContent.MedicineType = medicalTypes[auditContent.MedicineType];
-            }
 
             //剂型类别
             var doseForms = GetMapping("doseForms", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='jxlb' AND ZTBZ=1 ");
@@ -376,7 +422,7 @@ namespace MedicalInsuranceService.Controllers
             //药品使用频次
             var takeFrequences = GetMapping("takeFrequences", "SELECT distinct BDDM,SBDM FROM CW_YBDZ_YGYB WHERE DZLB='ypsypc' AND ZTBZ=1 ");
 
-            if (unitCode!="")
+            if (unitCode != "")
             {
                 if (unitCode.Substring(0, 1) == "A")
                 {
@@ -385,7 +431,7 @@ namespace MedicalInsuranceService.Controllers
                 else
                 {
                     settlementType = "01";
-                }   
+                }
             }
 
             foreach (var adviceDetail in auditContent.AdviceDetails)
@@ -540,9 +586,48 @@ namespace MedicalInsuranceService.Controllers
         public string GetProject(string hospitalCode, string settlementType, string projectType)
         {
             string controlCode = "";
-            string cacheKey = "projectCode";
+            string cacheKey = "projectCode_control";
             var cache = HttpContext.Current.Cache;
+            var mapping_control = new List<FeesProject>();
             var mapping = new List<FeesProject>();
+            if (cache.Get(cacheKey) != null)
+            {
+                mapping_control = (List<FeesProject>)cache.Get(cacheKey);
+            }
+            else
+            {
+                using (OracleConnection con = new OracleConnection(connectionString))
+                {
+                    con.Open();
+                    string sql = "select sbdm,jslx,lb,yydm from cw_yb_tydzb";
+                    //select m.ybbm,m.jslx,t.lb,t.yydm from cw_yb_ypml m,( union all select m.ybbm,m.jslx,t.lb,t.yydm from cw_yb_zlml m,(select * from cw_yb_tydzb where lb='zl' ) t where m.zxbm=t.sbdm";
+                    OracleCommand queryCommand = new OracleCommand(sql, con);
+                    OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
+                    var reader = queryCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        FeesProject feesProject = new FeesProject();
+                        feesProject.ControlCode = reader.GetValue(0).ToString();
+                        feesProject.SettlementType = reader.GetValue(1).ToString();
+                        feesProject.ProjectType = reader.GetValue(2).ToString();
+                        feesProject.ProjectCode = reader.GetValue(3).ToString();
+                        mapping_control.Add(feesProject);
+                    }
+                    cache.Add(cacheKey, mapping_control, dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                }
+            }
+            string command = "";
+            if (projectType == "yp")
+            {
+                cacheKey = "projectCode_medicinal";
+                command = "select ybbm,jslx,'yp' lb,zxbm from cw_yb_ypml";
+            }
+            else
+            {
+                cacheKey = "projectCode_zl";
+                command = "select ybbm,jslx,'zl' lb,zxbm from cw_yb_zlml";
+            }
+
             if (cache.Get(cacheKey) != null)
             {
                 mapping = (List<FeesProject>)cache.Get(cacheKey);
@@ -552,8 +637,7 @@ namespace MedicalInsuranceService.Controllers
                 using (OracleConnection con = new OracleConnection(connectionString))
                 {
                     con.Open();
-                    string sql = "Select dzdm,jslx,lb,yydm from cw_yb_tydzb";
-                    OracleCommand queryCommand = new OracleCommand(sql, con);
+                    OracleCommand queryCommand = new OracleCommand(command, con);
                     OracleCacheDependency dependency = new OracleCacheDependency(queryCommand);
                     var reader = queryCommand.ExecuteReader();
                     while (reader.Read())
@@ -569,10 +653,14 @@ namespace MedicalInsuranceService.Controllers
                 }
             }
 
-            FeesProject project = mapping.Find(p => p.ProjectType == projectType && p.ProjectCode == hospitalCode && p.SettlementType == settlementType);
+            FeesProject project = mapping_control.Find(p => p.ProjectType == projectType && p.ProjectCode == hospitalCode && p.SettlementType == settlementType);
             if (project != null)
             {
-                controlCode = project.ControlCode;
+                FeesProject projectCode = mapping.Find(p => p.ProjectCode == project.ControlCode && p.SettlementType == settlementType);
+                if (projectCode != null)
+                {
+                    controlCode = projectCode.ControlCode;
+                }
             }
             return controlCode;
         }
